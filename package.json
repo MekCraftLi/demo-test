@@ -14,12 +14,15 @@
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "@vueuse/core": "^13.9.0",
+    "lucide-vue-next": "^0.544.0",
     "motion-v": "^1.7.1",
     "tailwindcss": "^4.1.13",
+    "three": "^0.180.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",
+    "@types/three": "^0.180.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

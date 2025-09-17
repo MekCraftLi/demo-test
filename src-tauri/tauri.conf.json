@@ -13,8 +13,14 @@
     "windows": [
       {
         "title": "demo-test",
-        "width": 800,
-        "height": 600
+        "fullscreen": false,
+        "resizable": false,
+        "maximized": false,
+        "decorations": false,
+        "width": 750,
+        "height": 500,
+        "transparent": true,
+        "center": true
       }
     ],
     "security": {
