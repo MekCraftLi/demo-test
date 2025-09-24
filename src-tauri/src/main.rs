@@ -2,8 +2,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod command;
-mod menu;
-
 
 fn main() {
     run();
@@ -18,6 +16,7 @@ pub fn run() {
             command::window::close_window,
             command::window::maximize_window,
             command::window::minimize_window,
+            command::window::reset_window,
         ])
         .setup(|app| {
 

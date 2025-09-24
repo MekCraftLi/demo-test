@@ -19,12 +19,31 @@ async function closeHandle () {
   });
 }
 
+async function resetHandle() {
+  await invoke('reset_window', {
+    opts: {
+      label: "MEKs-Embedded-Kommand",
+      height: 720,
+      width: 1280,
+      url: '',
+    }
+  })
+}
+
 </script>
 
 <template>
 <div class="title-bar">
 
   <!-- 图标 -->
+  <div class="buttons" style="right: 125px; width: 60px; border-radius: 15px">
+    <button class="button" style="width: 40px; border-radius: 8px; background-color:#eae2b7 " @click="resetHandle">
+      <span class="content">
+        Re
+      </span>
+
+    </button>
+  </div>
 
   <div class="buttons">
     <div class="button" @click="minimizeHandle" id="minimized"></div>
@@ -62,6 +81,23 @@ async function closeHandle () {
 .icon:hover {
   background-color: rgba(10, 10, 10, 0.1);
   border-radius: 30%;
+
+}
+
+@font-face {
+  font-family: "Arial Black";
+  src: url("@/assets/font/ariblk.ttf") format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.content {
+  position: absolute;
+  color: #3a0ca3;
+  font-family: "Arial Black";
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
 
 }
 

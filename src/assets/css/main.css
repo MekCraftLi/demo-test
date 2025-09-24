@@ -149,4 +149,5 @@ html.light {
 /* 全局配置 */
 body {
     background-color: transparent;
+    user-select: none;
 }

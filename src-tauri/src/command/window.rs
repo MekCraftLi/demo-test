@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use tauri::{command, AppHandle, Manager, WebviewUrl, WebviewWindowBuilder};
+use tauri::{command, AppHandle, Manager, PhysicalSize, WebviewUrl, WebviewWindowBuilder};
 
 #[derive(Debug, Deserialize)]
 pub struct WindowOptions{
@@ -25,6 +25,10 @@ pub struct WindowOptions{
     fullscreen: Option<bool>,
     #[serde(default)]
     maximized: Option<bool>,
+    #[serde(default)]
+    minwidth: Option<f64>,
+    #[serde(default)]
+    minheight: Option<f64>,
 }
 
 #[command]
@@ -57,6 +61,9 @@ pub async fn create_window(app: AppHandle, opts: WindowOptions) {
     if let Some(b) = opts.maximized {
         builder = builder.maximized(b);
     }
+    if let (Some(d), Some(s)) = (opts.minwidth, opts.minheight) {
+        builder = builder.min_inner_size(d, s);
+    }
 
     println!("Created window");
     builder.build().expect("创建窗口失败");
@@ -87,4 +94,14 @@ pub fn maximize_window(app: AppHandle, label: &str) {
 #[command]
 pub fn minimize_window(app: AppHandle, label: &str) {
     app.get_webview_window(label).expect("window doesn't exist").minimize().expect("window minimize failed");
+}
+
+#[command]
+pub fn reset_window(app: AppHandle,  opts: WindowOptions) {
+    if let(Some(x), Some(y)) = (opts.width, opts.height) {
+        let physical_size = PhysicalSize::new(x,y);
+        app.get_webview_window(opts.label.as_str()).expect("window doesn't exist").set_size(physical_size).expect("TODO: panic message");
+    }
+
+
 }

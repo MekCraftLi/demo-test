@@ -200,6 +200,8 @@ async function handleCreateWindow() {
       height: 720,
       width: 1280,
       decorations: false,
+      minwidth: 600,
+      minheight: 400,
       url: "http://localhost:1420/main"
 
     }
