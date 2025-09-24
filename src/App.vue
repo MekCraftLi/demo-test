@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /* ----- imports ---------------------------------------------------------------------------------------------------- */
-import {ref, onMounted, nextTick} from 'vue'
+import {ref, onMounted} from 'vue'
 import FluidCursor from "./components/cursor/FluidCursor.vue";
 import gsap from "gsap";
-
+import {invoke} from "@tauri-apps/api/core";
 
 /* ----- components ------------------------------------------------------------------------------------------------- */
 
@@ -171,8 +171,43 @@ onMounted(() => {
   }, "<")
 
 
+  timeLine1.to({}, {
+    delay: 1.3,
+    toStart: () => {
+      handleCloseWindow()
+    }
+  })
+
+
+  timeLine1.to({}, {
+    toStart: () => {
+      handleCreateWindow()
+    }
+  }, "<")
+
+
   timeLine1.restart();
 })
+
+async function handleCreateWindow() {
+  console.log("Creating Window...");
+
+  await invoke("create_window", {
+    opts: {
+      label: "MEKs-Embedded-Kommand",
+      resizable: true,
+      maximized: true,
+
+    }
+  })
+}
+
+async function handleCloseWindow() {
+  console.log("closing Window...");
+  await invoke("close_window", {
+    label: "Loading",
+  })
+}
 
 </script>
 
@@ -180,8 +215,11 @@ onMounted(() => {
 <template>
   <div class="windows">
     <div class="noselect">
-      <div class="background"></div>
+      <!--<div class="background"></div>
       <div class="background-img"><img class="yuzusoft" src="./assets/svg-img/welcome/yuzu-logo.svg"></div>
+      -->
+
+
 
 
       <!-- 隔板与灯光 ------------------------------------------------------------------------------------------------ -->
@@ -258,9 +296,10 @@ onMounted(() => {
   position: absolute;
   height: 500px;
   width: 750px;
-  background-color: #eee;
+  background-color: transparent;
   opacity: 0.9;
   z-index: -2;
+  border-radius: 30px;
   overflow: hidden;
 }
 
@@ -279,11 +318,11 @@ onMounted(() => {
   -webkit-user-select: none; /* Safari / Chrome */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* 旧版 IE/Edge */
-  user-select: none;         /* 禁止文字选中 */
-  -webkit-user-drag: none;   /* 禁止拖动图片（Chrome / Safari） */
-  -moz-user-select: none;    /* Firefox */
-  -ms-user-select: none;     /* IE/Edge */
-  pointer-events: none;      /* 如果不希望鼠标事件影响图片 */
+  user-select: none; /* 禁止文字选中 */
+  -webkit-user-drag: none; /* 禁止拖动图片（Chrome / Safari） */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge */
+  pointer-events: none; /* 如果不希望鼠标事件影响图片 */
 }
 
 .test-butt {
@@ -292,6 +331,7 @@ onMounted(() => {
   height: 25px;
   background: white;
   border-radius: 10%;
+  z-index: 10;
 }
 
 /* -------- 隔板与灯光 -----------------------------------------------------------------------------------------------*/
@@ -436,8 +476,6 @@ body {
 }
 
 .letter-container {
-
-
   position: absolute;
   transform: translate(-50%);
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 80%);
@@ -469,57 +507,6 @@ body {
 
   background: linear-gradient(to bottom right, rgba(229, 60, 29, 100) 0%, rgba(0, 63, 221, 100) 20%);
   z-index: -3;
-}
-
-
-.card {
-  position: absolute;
-  width: 80px;
-  height: 120px;
-  background: #4cafef;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transform-origin: top left; /* 左上角 */
-}
-
-.neon-line {
-  width: 300px;
-  height: 4px;
-  margin: 100px auto;
-
-  background: linear-gradient(90deg, #ff00cc, #3333ff, #00ffcc);
-  background-size: 300% 100%;
-
-  animation: neon-glow 3s linear infinite;
-
-  box-shadow: 0 10px 5px #ff00cc,
-  0 0 20px #3333ff,
-  0 0 40px #00ffcc;
-}
-
-@keyframes neon-glow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.wall {
-  width: 100%;
-  height: 300px;
-  background: #111; /* 墙面颜色 */
-  position: relative;
-  overflow: hidden;
 }
 
 

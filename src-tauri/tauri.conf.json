@@ -12,7 +12,8 @@
   "app": {
     "windows": [
       {
-        "title": "demo-test",
+        "title": "Loading",
+        "label": "Loading",
         "fullscreen": false,
         "resizable": false,
         "maximized": false,
@@ -20,7 +21,9 @@
         "width": 750,
         "height": 500,
         "transparent": true,
-        "center": true
+        "center": true,
+        "shadow": false,
+        "always-on-top": true
       }
     ],
     "security": {
