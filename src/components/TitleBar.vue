@@ -19,14 +19,12 @@ async function closeHandle () {
   });
 }
 
-
 </script>
 
 <template>
 <div class="title-bar">
 
   <!-- 图标 -->
-  <img class="icon" src="../assets/icons/processed.png" alt="▢" @dblclick="closeHandle" />
 
   <div class="buttons">
     <div class="button" @click="minimizeHandle" id="minimized"></div>
@@ -46,7 +44,7 @@ async function closeHandle () {
   position: absolute;
   display: flex;
 
-  background:linear-gradient(to right, #b7bddf, #d5d8ec);
+  background:linear-gradient(to right, rgba(0, 0, 0, 0) 20%, #635dc5);
   width: 100%;
   height: 30px;
   -webkit-app-region: drag; /* 指定可拖动区域 */
@@ -72,18 +70,20 @@ async function closeHandle () {
   height: 80%;
   width: 100px;
   right: 10px;
-  top: 8%;
+  top: 10%;
   border-radius: 15px;
   display: flex;
   align-items: center; /* 垂直居中 */
   justify-content: space-around;
-  background-color: rgba(100, 100, 100, 0.1);
+  background-color: #7695FF;
+  box-shadow: inset 2px 1px 2px #03346E;
 }
 
 .button {
   width: 17px;
   height: 17px;
   border-radius: 50%;
+  box-shadow: 2px 1px 2px #03346E;
 }
 
 .button:hover {
