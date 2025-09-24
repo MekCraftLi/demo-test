@@ -23,6 +23,7 @@
         "transparent": true,
         "center": true,
         "shadow": false,
+        "minimizable": false,
         "always-on-top": true
       }
     ],
