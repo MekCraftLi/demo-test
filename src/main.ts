@@ -1,7 +1,13 @@
-import { createApp } from "vue";
+import {createApp} from "vue";
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+import VirtualScroller from "vue-virtual-scroller";
+
 import App from "./App.vue";
 
 import './assets/css/main.css'
 import router from './router';
 
-createApp(App).use(router).mount("#app");
+const app = createApp(App)
+app.use(router)
+app.use(VirtualScroller)
+app.mount("#app");

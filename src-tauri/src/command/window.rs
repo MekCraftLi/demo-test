@@ -64,6 +64,7 @@ pub async fn create_window(app: AppHandle, opts: WindowOptions) {
     if let (Some(d), Some(s)) = (opts.minwidth, opts.minheight) {
         builder = builder.min_inner_size(d, s);
     }
+    builder = builder.focused(true);
 
     println!("Created window");
     builder.build().expect("创建窗口失败");
