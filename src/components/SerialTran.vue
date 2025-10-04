@@ -2,7 +2,7 @@
 
 /*----- 1. import ----------------------------------------------------------------------------------------------------*/
 
-import {ref, onMounted, watch, nextTick} from "vue";
+import {ref, watch, nextTick} from "vue";
 import {invoke, Channel} from "@tauri-apps/api/core"
 import {DynamicScroller, DynamicScrollerItem} from "vue-virtual-scroller"
 
@@ -67,7 +67,7 @@ function handleScroll(event: Event) {
 
 
 // 新消息加入
-watch(messages, async (newMessages) => {
+watch(messages, async () => {
   if (autoScroll) {
     await nextTick();
     let index = messages.value.length - 1;
@@ -89,7 +89,7 @@ function formatTime(ms: number) {
 </script>
 
 <template>
-
+<div class="root">
   <button
       style="
       position: absolute;
@@ -146,10 +146,16 @@ background: #ccc;"
 
   </DynamicScroller>
 
-
+</div>
 </template>
 
 <style scoped>
+
+.root {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
 
 .scroller {
   position: absolute;
@@ -182,7 +188,6 @@ background: #ccc;"
     white-space: pre-wrap;
     tab-size: 16; /* 4 个空格宽度 */
     display: inline-block; /* 或 inline-flex */
-    white-space: pre-wrap; /* 自动换行 */
     word-break: break-word; /* 长字符串换行 */
   }
 
