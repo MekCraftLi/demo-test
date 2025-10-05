@@ -1,8 +1,10 @@
 <script setup lang="ts">
 
-import {computed, ComputedRef, onMounted, ref} from "vue";
+import {computed, ComputedRef, onMounted, ref, watch} from "vue";
 import {gsap} from "gsap";
 import {MorphSVGPlugin} from "gsap/MorphSVGPlugin"
+
+
 
 /* 导航栏参数 */
 
@@ -11,11 +13,11 @@ const navBaseWidth = 30;
 
 // 高
 const navBaseHeight: ComputedRef<number> = computed(() => {
-  return (options.length * R * 2 + 70);
+  return (props.navItems.length * R * 2 + 70);
 })
 
 // 索引
-const selected = ref(0);
+const selected = ref(-1);
 
 // 索引图形中心高度
 const centerHeight: ComputedRef<number> = computed(() => {
@@ -31,7 +33,7 @@ const pathRef = ref<SVGPathElement | null>(null);
 
 /*----- 选项内容 -------------------------------------------*/
 
-interface OptItem {
+export interface OptItem {
   index: number;
   url: string;
   name: string;
@@ -39,17 +41,23 @@ interface OptItem {
 }
 
 
-const options: OptItem[] = [
-  {index: 0, url: '', name: "通讯信息显示", width: 110},
-  {index: 1, url: '', name: "Flash资源管理", width: 115},
-  {index: 2, url: '', name: "消息转发", width: 80}
-]
+const props = defineProps<{
+  navItems: OptItem[],
+}>()
+
+const emit = defineEmits<{ (e: 'select', index: number) : void}>();
+
+watch(selected, (selectedIndex: number) => {
+  emit("select", selectedIndex);
+})
+
+
 
 
 /* 样式 */
 
 const navBoxStyle: ComputedRef<string> = computed(() => {
-  return 'height: ' + (options.length * 50 + 80) + 'px; border-radius: ' + options.length / 2 + 'px';
+  return 'height: ' + (props.navItems.length * 50 + 80) + 'px; border-radius: ' + props.navItems.length / 2 + 'px';
 });
 
 const navSelectedStyle: ComputedRef<string> = computed(() => {
@@ -62,6 +70,8 @@ function getNavBase() {
     x: number;
     y: number;
   }
+
+
 
 
   // 下半圆弧
@@ -91,19 +101,22 @@ function getNavBase() {
   //上圆角
   let arc5end: Point = {x: navBaseWidth, y: centerHeight.value - l};
 
-  let arc1: String = `L ${arc1start.x},${arc1start.y} A ${navBaseWidth / 2} ${navBaseWidth / 2} 0 0 0 ${arc1end.x},${arc1end.y} `;
-  let arc2: String = `L ${arc2start.x},${arc2start.y} A ${navBaseWidth / 2} ${navBaseWidth / 2} 0 0 0 ${arc2end.x},${arc2end.y} `;
-  let arc3: String = `L ${arc3start.x},${arc3start.y} A ${r} ${r} 0 0 0 ${arc3end.x},${arc3end.y} `;
-  let arc4: String = `A ${R} ${R} 0 0 1 ${arc4end.x},${arc4end.y} `;
-  let arc5: String = `A ${r} ${r} 0 0 0 ${arc5end.x},${arc5end.y} `;
+  let arc1: string = `L ${arc1start.x},${arc1start.y} A ${navBaseWidth / 2} ${navBaseWidth / 2} 0 0 0 ${arc1end.x},${arc1end.y} `;
+  let arc2: string = `L ${arc2start.x},${arc2start.y} A ${navBaseWidth / 2} ${navBaseWidth / 2} 0 0 0 ${arc2end.x},${arc2end.y} `;
+  let arc3: string = `L ${arc3start.x},${arc3start.y} A ${r} ${r} 0 0 0 ${arc3end.x},${arc3end.y} `;
+  let arc4: string = `A ${R} ${R} 0 0 1 ${arc4end.x},${arc4end.y} `;
+  let arc5: string = `A ${r} ${r} 0 0 0 ${arc5end.x},${arc5end.y} `;
+
+  if (selected.value < 0) {
+    let resetPath = `M 0,${navBaseWidth / 2} ${arc1} ${arc2} Z`;
+    console.log(resetPath);
+    return resetPath;
+  }
 
   return `M 0,${navBaseWidth / 2} ` + arc1 + arc3 + arc4 + arc5 + arc2 + "Z";
 
 }
 
-const debugTest = () => {
-  console.log(Number(navBaseHeight.value) - 25)
-}
 
 
 /* 钩子函数 */
@@ -135,9 +148,9 @@ function changeSelected(index: number) {
 </script>
 
 <template>
-  <div class="root">
+  <div class="root" :style="`width: ${navBaseWidth + 50}px;height: ${navBaseHeight + 50}px`">
 
-    <div class="nav-base-box" :style="navBoxStyle" @click="debugTest">
+    <div class="nav-base-box" :style="navBoxStyle" >
       <svg class="nav-base-img" :viewBox="`-5 -5 ` + (navBaseWidth + 10) + ' ' + (navBaseHeight + 10)"
            :width="(navBaseWidth + 15)  + `px`" :height="(navBaseHeight + 15) + `px`"
            preserveAspectRatio="none">
@@ -152,7 +165,7 @@ function changeSelected(index: number) {
 
     <div
         class="nav-option"
-        v-for="opt in options"
+        v-for="opt in props.navItems"
         key="index"
         :style="`
         top: calc(50% - ${navBaseHeight / 2 - (35 + R * (opt.index * 2 + 1))}px);
@@ -178,15 +191,15 @@ function changeSelected(index: number) {
 
         <div class="nav-text-box"
              :style="`
-        left: ${-options[opt.index].width}px;
-        width: ${options[opt.index].width}px;
+        left: ${-props.navItems[opt.index].width}px;
+        width: ${props.navItems[opt.index].width}px;
        `"
         >
         <span
             class="nav-selected-info-text"
             :style="`left:${R - 15}px`"
         >
-          {{ options[opt.index].name }}
+          {{ props.navItems[opt.index].name }}
 
         </span>
 
@@ -195,24 +208,17 @@ function changeSelected(index: number) {
       </div>
     </div>
 
-
   </div>
 </template>
 
 <style scoped>
-
-.root {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
 
 .nav-base-box {
   position: absolute;
   width: 100px;
   height: 50px;
   top: 50%;
-  left: 4%;
+  left: 50%;
   transform: translate(-50%, -50%);
 
   .nav-base-img {
@@ -229,12 +235,10 @@ function changeSelected(index: number) {
 
 .nav-option{
   position: absolute;
-  transform: translate(-50%, -50%);
-  min-height: 100px;
-  min-width: 100px;
-  left: 4%;
-
-
+  transform: translate(50%, -50%);
+  left: 0%;
+  width: 50%;
+  height: 20px;
 
   .nav-box {
     position: absolute;
@@ -243,7 +247,7 @@ function changeSelected(index: number) {
     top: 50%;
     left: 50%;
     border-radius: 50%;
-    z-index: 2;
+    z-index: 3;
     transition: width 0.5s ease,
     height 0.5s ease,
     top 0.5s ease,

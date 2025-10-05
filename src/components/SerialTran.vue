@@ -2,7 +2,7 @@
 
 /*----- 1. import ----------------------------------------------------------------------------------------------------*/
 
-import {ref, watch, nextTick} from "vue";
+import {ref, watch, nextTick, onMounted} from "vue";
 import {invoke, Channel} from "@tauri-apps/api/core"
 import {DynamicScroller, DynamicScrollerItem} from "vue-virtual-scroller"
 
@@ -86,6 +86,7 @@ function formatTime(ms: number) {
 
   return `${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
+
 </script>
 
 <template>
@@ -155,6 +156,7 @@ background: #ccc;"
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: -2;
 }
 
 .scroller {
