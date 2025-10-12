@@ -109,7 +109,6 @@ function getNavBase() {
 
   if (selected.value < 0) {
     let resetPath = `M 0,${navBaseWidth / 2} ${arc1} ${arc2} Z`;
-    console.log(resetPath);
     return resetPath;
   }
 
